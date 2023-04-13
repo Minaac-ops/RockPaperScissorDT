@@ -22,10 +22,11 @@ Jenkinsfile {
                     }
                 }
             }
-            stage("c deploy") {
+            stage("Continous deploy deploy") {
                 steps {
-                    sh "docker compose rm" //to remove the old one
-                    sh "docker compose up -d" //deatch mode , the process will end and everything is fine
+                    build job: "RockPaperScissor-Rollback", parameters: [[$class: "StringParameterValue", name: "DEPLOY_NUMBER", value: "${BUILD_NUMBER}"]]
+                    //sh "docker compose rm" //to remove the old one
+                    //sh "docker compose up -d" //deatch mode , the process will end and everything is fine
                 }
             }
         }

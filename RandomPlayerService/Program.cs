@@ -22,23 +22,19 @@ public static class Program
         while (!connectionEstablished)
         {
             var bus = ConnectionHelper.GetRMQConnection();
-            var subscriptionResult = bus.PubSub.SubscribeAsync<GameStartedEvent>("RPS", e =>
+            var subscriptionResult = bus.PubSub.SubscribeAsync<GameStartedEvent>("RPS_" + Player.GetPlayerId(), e =>
             {
-                var propagator = new TraceContextPropagator();
-                var parentCtx = propagator.Extract(default, e, (r, key) =>
-                {
-                    return new List<string>(new[] { r.Header.ContainsKey(key) ? r.Header[key].ToString() : string.Empty} );
-                });
-                Baggage.Current = parentCtx.Baggage;
-                using var activity = Monitoring.ActivitySource.StartActivity("Message received", ActivityKind.Consumer, parentCtx.ActivityContext);
-                
                 var moveEvent = Player.MakeMove(e);
-                bus.PubSub.PublishAsync(moveEvent);
+                bus.PubSub.PublishWithTracingAsync(moveEvent);
             }).AsTask();
 
             await subscriptionResult.WaitAsync(CancellationToken.None);
             connectionEstablished = subscriptionResult.Status == TaskStatus.RanToCompletion;
             if(!connectionEstablished) Thread.Sleep(1000);
+
+            bus.PubSub.SubscribeWithTracingAsync<GameFinishedEvent>("RPS_" + Player.GetPlayerId(), e => {
+                Player.ReceiveResult(e);
+            });
         }
 
         while (true) Thread.Sleep(5000);

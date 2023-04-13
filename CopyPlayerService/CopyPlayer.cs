@@ -7,7 +7,7 @@ using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
 using Serilog;
 
-namespace CopyPlayerService;
+namespace CopyPlayerService{
 
 public class CopyPlayer : IPlayer
 {
@@ -48,4 +48,5 @@ public class CopyPlayer : IPlayer
     public string GetPlayerId(){
         return PlayerId;
     }
+}
 }

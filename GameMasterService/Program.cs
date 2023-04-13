@@ -14,29 +14,35 @@ public class Program
 
     public static async Task Main()
     {
-        using var activity = Monitoring.ActivitySource.StartActivity();
         var connectionEstablished = false;
+
+        Thread.Sleep(5000);
 
         using var bus = ConnectionHelper.GetRMQConnection();
         while (!connectionEstablished)
         {
             var subscriptionResult = bus.PubSub
-                .SubscribeAsync<PlayerMovedEvent>("RPS", e =>
+                .SubscribeWithTracingAsync<PlayerMovedEvent>("RPS", e =>
                 {
                      var finishedEvent = game.ReceivePlayerEvent(e);
                      if (finishedEvent != null)
                      {
-                         bus.PubSub.PublishAsync(finishedEvent);
+                        bus.PubSub.PublishWithTracingAsync(finishedEvent);
                      }
-                })
-                .AsTask();
+                }).AsTask();
 
             await subscriptionResult.WaitAsync(CancellationToken.None);
             connectionEstablished = subscriptionResult.Status == TaskStatus.RanToCompletion;
             if (!connectionEstablished) Thread.Sleep(1000);
         }
 
-        await bus.PubSub.PublishAsync(game.Start());
+        for (var i = 0; i < 1; i++){
+            using (Monitoring.ActivitySource.StartActivity("Preparing to start game"))
+            {
+                bus.PubSub.PublishWithTracingAsync(game.Start());
+            }
+            Thread.Sleep(1500);
+        }
         
         while (true) Thread.Sleep(5000);
     }

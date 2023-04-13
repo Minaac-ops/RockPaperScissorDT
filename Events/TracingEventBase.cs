@@ -4,7 +4,7 @@ namespace Events
 {
     public class TracingEventBase
     {
-        public Dictionary<string, object> Header { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, object> Headers { get; set; } = new Dictionary<string, object>();
         
 
     }

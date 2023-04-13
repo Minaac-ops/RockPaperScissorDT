@@ -10,21 +10,16 @@ namespace Helpers;
 
 public static class Monitoring
 {
-    public static readonly ActivitySource ActivitySource = new("RPS", "1.0.0");
-    private static TracerProvider _tracerProvider;
+    public static readonly ActivitySource ActivitySource = new("RPS_"+Assembly.GetEntryAssembly()?.GetName().Name, "1.0.0");
 
     static Monitoring()
     {
-        // Configure tracing
-        var serviceName = Assembly.GetExecutingAssembly().GetName().Name;
-        var version = "1.0.0";
-
-        _tracerProvider = Sdk.CreateTracerProviderBuilder()
-            .AddZipkinExporter()
-            .AddConsoleExporter()
-            .AddSource(ActivitySource.Name)
-            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: serviceName, serviceVersion: version))
-            .Build();
+        Sdk.CreateTracerProviderBuilder()
+        .AddZipkinExporter()
+        .AddConsoleExporter()
+        .AddSource(ActivitySource.Name)
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: ActivitySource.Name))
+        .Build();
         
         // Configure logging
         Log.Logger = new LoggerConfiguration()

@@ -2,7 +2,7 @@ using Events;
 
 namespace Events;
 
-public enum Move : TracingEventBase
+public enum Move
 {
     Rock,
     Paper,

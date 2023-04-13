@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Events;
 
 namespace Events;
 
-public class GameStartedEvent
+public class GameStartedEvent : TracingEventBase
 {
-    public Dictionary<string, object> Header { get; set; } = new();
     public Guid GameId { get; set; }
 }

@@ -35,5 +35,9 @@ public class RandomPlayer : IPlayer
     {
         using var activity = Monitoring.ActivitySource.StartActivity();
     }
+
+    public string GetPlayerId(){
+        return PlayerId;
+    }
 }
 

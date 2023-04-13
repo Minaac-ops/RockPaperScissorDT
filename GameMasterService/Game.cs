@@ -25,14 +25,6 @@ public class Game
         var startEvent = new GameStartedEvent { GameId = gameId };
         Log.Logger.Debug("Started new game with id {Id}", gameId);
         
-        var activityCtx = activity?.Context ?? Activity.Current?.Context ?? default;
-        var propagationCtx = new PropagationContext(activityCtx, Baggage.Current);
-        var propagator = new TraceContextPropagator();
-        propagator.Inject(propagationCtx, startEvent, (r, key, value) =>
-        {
-            r.Header.Add(key,value);
-        });
-        
         return startEvent;
     }
 

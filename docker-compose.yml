@@ -27,6 +27,32 @@ services:
     volumes:
       - rps_rmq_data:/var/lib/rabbitmq
 
-volumes:
-  rps_seq_data:
-  rps_rmq_data:
+  game-master:
+    build:
+      context: .
+      dockerfile: GameMasterService/Dockerfile
+    image: annechristensen1995/rps-game-master:${DEPLOY_NUMBER}
+    depends_on:
+      - seq
+      - zipkin
+      - rmq
+
+  copy-player:
+    build:
+      context: .
+      dockerfile: CopyPlayerService/Dockerfile
+    image: annechristensen1995/rps-copy-player:${DEPLOY_NUMBER}
+    depends_on:
+      - seq
+      - zipkin
+      - rmq
+
+  random-player:
+    build:
+      context: .
+      dockerfile: RandomPlayerService/Dockerfile
+    image: annechristensen1995/rps-random-player:${DEPLOY_NUMBER}
+    depends_on:
+      - seq
+      - zipkin
+      - rmq
