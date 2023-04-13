@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  seq:
+    image: datalust/seq
+    ports:
+      - 5341:5341
+      - 5342:80
+    volumes:
+      - rps_seq_data:/data
+    environment:
+      - ACCEPT_EULA=Y
+
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+
+  rmq:
+    image: rabbitmq:management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=mina0825@easv365.dk
+      - RABBITMQ_DEFAULT_PASS=CIRkeline2
+    volumes:
+      - rps_rmq_data:/var/lib/rabbitmq
+
+volumes:
+  rps_seq_data:
+  rps_rmq_data:
