@@ -15,7 +15,7 @@ pipeline {
         }
         stage("C. Del") {
             steps {
-                withCredentials([usernamePassword(credentialsId: "Github", passwordVariable: "DH_PASSWORD", usernameVariable: "DH_USERNAME")]) {
+                withCredentials([usernamePassword(credentialsId: "Hub", passwordVariable: "DH_PASSWORD", usernameVariable: "DH_USERNAME")]) {
                     sh 'docker login -u $DH_USERNAME -p $DH_PASSWORD'
                     sh "docker compose push"
                 }
