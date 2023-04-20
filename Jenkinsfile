@@ -21,9 +21,9 @@ pipeline {
                 }
             }
         }
-        stage("C. Dep") {
+        stage("Deploy") {
             steps {
-                build job: 'RPS-Deploy', parameters: [[$class: "StringParameterValue", name: 'DEPLOY_NUMBER', value: "${BUILD_NUMBER}"]]
+                build job: 'RPS-Deploy', parameters: [[$class: 'StringParameterValue', name: 'DEPLOY_NUMBER', value: "${BUILD_NUMBER}"]]
             }
         }
     }
