@@ -27,7 +27,7 @@ services:
     build:
       context: .
       dockerfile: GameMasterService/Dockerfile
-    image: annechristensen1995/RockPaperScissorDT-game-master:${DEPLOY_NUMBER}
+    image: annechristensen1995/rps-game-master:${DEPLOY_NUMBER}
     depends_on:
       - seq
       - zipkin
@@ -37,7 +37,7 @@ services:
     build:
       context: .
       dockerfile: CopyPlayerService/Dockerfile
-    image: annechristensen1995/RockPaperScissorDT-copy-player:${DEPLOY_NUMBER}
+    image: annechristensen1995/rps-copy-player:${DEPLOY_NUMBER}
     depends_on:
       - seq
       - zipkin
@@ -47,7 +47,7 @@ services:
     build:
       context: .
       dockerfile: RandomPlayerService/Dockerfile
-    image: annechristensen1995/RockPaperScissorDT-random-player:${DEPLOY_NUMBER}
+    image: annechristensen1995/rps-random-player:${DEPLOY_NUMBER}
     depends_on:
       - seq
       - zipkin
