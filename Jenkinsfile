@@ -23,7 +23,7 @@ pipeline {
         }
         stage("Deploy") {
             steps {
-                build job: 'rps-DEPLOY', parameters: [[$class: 'StringParameterValue', name: 'DEPLOY_NUMBER', value: "${BUILD_NUMBER}"]]
+                build job: 'RockPaperScissorDT-deploy', parameters: [[$class: 'StringParameterValue', name: 'DEPLOY_NUMBER', value: "${BUILD_NUMBER}"]]
             }
         }
     }
